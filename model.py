@@ -5,7 +5,7 @@ class UserModel:
         self.setup_database()
     
     def setup_database(self):
-        self.db.cursor.execute("CREATE TABLE IF NOT EXISTS users(id int primary key auto_increment, name varchar(255), password varchar(255))")
+        self.db.cursor.execute("CREATE TABLE IF NOT EXISTS users(id int primary key auto_increment, username varchar(255), password varchar(255))")
         self.db.conn.commit()
         print("Table created")
     
@@ -33,3 +33,8 @@ class UserModel:
                 return False, "Wrong password"
         else:
             return False, "User not found"
+    def password_is_valid(self,password):
+        if len(password)>4:
+            return True
+        else:
+            False
