@@ -1,4 +1,5 @@
 import mysql.connector
+import re
 class UserModel:
     def __init__(self,db_connection):
         self.db = db_connection
@@ -17,7 +18,7 @@ class UserModel:
         else:
             print("før password_is_valid")
             if not self.password_is_valid(password):
-                return False, "Your password is too weak."
+                return False, "Your password is too weak.\nMinimum six characters, Max 12, at least one letter, one number and one special character"
             else:
                 self.db.cursor.execute("INSERT INTO users(username,password) VALUES(%s,%s)",(username,password))
                 self.db.conn.commit()
@@ -34,7 +35,9 @@ class UserModel:
         else:
             return False, "User not found"
     def password_is_valid(self,password):
-        if len(password)>4:
+        #Minimum six characters, Max 12, at least one letter, one number and one special character
+        match = re.match("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,12}$",password)
+        if match:
             return True
         else:
-            False
+            return False
